@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ArrowLeft, Building2, Cpu, GraduationCap, ShieldCheck, Zap } from "lucide-react";
+import {
+  ArrowLeft,
+  Building2,
+  Cpu,
+  GraduationCap,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
 import AppShell from "@/components/app-shell";
 import BlockchainBadge from "@/components/blockchain-badge";
 import IntegrationCard from "@/components/integration-card";
@@ -28,10 +35,10 @@ export default async function HomePage() {
               </div>
               <div className="space-y-3">
                 <h1 className="text-4xl font-black tracking-tight text-white md:text-6xl">
-                  منارة الصف الذكي
+                  هدريشن - منصة إدارة طاقة القاعات الذكية
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-slate-300">
-                  منصة عربية أولًا لتشغيل الكهرباء داخل القاعات الدراسية بذكاء، مع
+                  منصة لادارة تشغيل الكهرباء داخل القاعات الدراسية بذكاء، مع
                   تتبع لحظي للجلسات، استثناءات فورية، وسجل تدقيق موثوق لجامعات
                   المملكة.
                 </p>
@@ -39,15 +46,21 @@ export default async function HomePage() {
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="kpi p-4">
                   <p className="text-sm text-slate-400">القاعات المتصلة</p>
-                  <p className="mt-2 text-3xl font-black">{admin.kpis.totalRooms}</p>
+                  <p className="mt-2 text-3xl font-black">
+                    {admin.kpis.totalRooms}
+                  </p>
                 </div>
                 <div className="kpi p-4">
                   <p className="text-sm text-slate-400">جلسات اليوم</p>
-                  <p className="mt-2 text-3xl font-black">{admin.kpis.todaysSessions}</p>
+                  <p className="mt-2 text-3xl font-black">
+                    {admin.kpis.todaysSessions}
+                  </p>
                 </div>
                 <div className="kpi p-4">
                   <p className="text-sm text-slate-400">استجابة الاستثناءات</p>
-                  <p className="mt-2 text-3xl font-black">{admin.kpis.approvalRate}%</p>
+                  <p className="mt-2 text-3xl font-black">
+                    {admin.kpis.approvalRate}%
+                  </p>
                 </div>
               </div>
             </div>
@@ -57,7 +70,9 @@ export default async function HomePage() {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-sm text-slate-400">بوابة الإدارة</p>
-                    <p className="mt-2 text-2xl font-extrabold">تحكم شامل ومؤشرات حية</p>
+                    <p className="mt-2 text-2xl font-extrabold">
+                      تحكم شامل ومؤشرات حية
+                    </p>
                   </div>
                   <Building2 className="h-10 w-10 text-[var(--accent)]" />
                 </div>
@@ -65,7 +80,10 @@ export default async function HomePage() {
                   مراقبة حالة القاعات، مراجعة الطلبات الاستثنائية، ومتابعة السجل
                   التشغيلي والتدقيق.
                 </p>
-                <Link href="/admin" className="button-primary mt-5 inline-flex items-center gap-2">
+                <Link
+                  href="/admin"
+                  className="button-primary mt-5 inline-flex items-center gap-2"
+                >
                   الدخول إلى الإدارة
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
@@ -74,8 +92,12 @@ export default async function HomePage() {
               <div className="card p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm text-slate-400">بوابة عضو هيئة التدريس</p>
-                    <p className="mt-2 text-2xl font-extrabold">{facultyPortal.faculty.name}</p>
+                    <p className="text-sm text-slate-400">
+                      بوابة عضو هيئة التدريس
+                    </p>
+                    <p className="mt-2 text-2xl font-extrabold">
+                      {facultyPortal.faculty.name}
+                    </p>
                   </div>
                   <GraduationCap className="h-10 w-10 text-[var(--accent-2)]" />
                 </div>
@@ -83,7 +105,10 @@ export default async function HomePage() {
                   عرض الجلسة الحالية، طلب فتح متأخر، نقل قاعة، أو تمديد الجلسة
                   بتجربة سريعة مناسبة للعرض.
                 </p>
-                <Link href="/faculty" className="button-secondary mt-5 inline-flex items-center gap-2">
+                <Link
+                  href="/faculty"
+                  className="button-secondary mt-5 inline-flex items-center gap-2"
+                >
                   الدخول كعضو هيئة تدريس
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
@@ -99,16 +124,24 @@ export default async function HomePage() {
               <h2 className="text-xl font-extrabold">تجربة دخول مبسطة</h2>
             </div>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <Link href="/admin" className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[var(--accent)]/40 hover:bg-white/[0.05]">
+              <Link
+                href="/admin"
+                className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[var(--accent)]/40 hover:bg-white/[0.05]"
+              >
                 <p className="text-sm text-slate-400">المسار 01</p>
                 <h3 className="mt-2 text-2xl font-bold">مركز الطاقة الجامعي</h3>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
                   مؤشرات لحظية، مراجعات الاستثناءات، وتكاملات النظام الذكي.
                 </p>
               </Link>
-              <Link href="/faculty" className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[var(--accent-2)]/40 hover:bg-white/[0.05]">
+              <Link
+                href="/faculty"
+                className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[var(--accent-2)]/40 hover:bg-white/[0.05]"
+              >
                 <p className="text-sm text-slate-400">المسار 02</p>
-                <h3 className="mt-2 text-2xl font-bold">واجهة عضو هيئة التدريس</h3>
+                <h3 className="mt-2 text-2xl font-bold">
+                  واجهة عضو هيئة التدريس
+                </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
                   تفعيل متأخر عبر QR، تغيير القاعة، وتمديد الجلسة مع سجل موثق.
                 </p>
@@ -123,7 +156,10 @@ export default async function HomePage() {
             </div>
             <div className="mt-5 grid gap-4">
               {admin.integrations.map((integration) => (
-                <IntegrationCard key={integration.id} integration={integration} />
+                <IntegrationCard
+                  key={integration.id}
+                  integration={integration}
+                />
               ))}
             </div>
           </div>
