@@ -1,7 +1,6 @@
 ﻿import Link from "next/link";
 import { ArrowLeft, Building2, GraduationCap, ShieldCheck, Sparkles } from "lucide-react";
 import AppShell from "@/components/app-shell";
-import BlockchainBadge from "@/components/blockchain-badge";
 import BrandMark from "@/components/brand-mark";
 import IntegrationCard from "@/components/integration-card";
 import { getAdminOverview, getFacultyPortalData } from "@/lib/domain";
@@ -20,10 +19,6 @@ export default async function HomePage() {
         <section className="hero-banner card overflow-hidden px-6 py-8 md:px-8 md:py-10">
           <div className="grid gap-8 lg:grid-cols-[1.4fr_0.9fr] lg:items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-3">
-                <BlockchainBadge />
-                <span className="badge bg-white/10 text-white">واجهة مستوحاة من كفو KFU</span>
-              </div>
               <div className="mt-6 max-w-3xl">
                 <BrandMark className="text-white [&_p]:text-white" />
                 <h1 className="mt-6 text-4xl font-black leading-tight md:text-6xl">
