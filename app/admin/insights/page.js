@@ -36,9 +36,6 @@ export default async function AdminInsightsPage() {
           <div>
             <p className="text-sm font-black text-[var(--kfu-green-700)]">ذكاء القرار</p>
             <h2 className="mt-2 text-3xl font-black text-[var(--ink-900)]">تنبؤات ومقترحات تشغيلية</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ink-700)]">
-              هذه الصفحة تعرض ملخصًا تنبؤيًا مبنيًا على بيانات التشغيل الحالية (عرض شكلي للنسخة التجريبية).
-            </p>
           </div>
           <div className="rounded-[18px] border border-[var(--line)] bg-[var(--surface-soft)] px-4 py-3 text-sm font-black text-[var(--ink-700)]">
             متوسط الحمل: {Math.round(averageLoad * 10) / 10} kW

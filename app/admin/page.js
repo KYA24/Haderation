@@ -68,9 +68,6 @@ export default async function AdminHomePage() {
           <div>
             <p className="text-sm font-black text-[var(--kfu-green-700)]">ذكاء القرار</p>
             <h2 className="mt-2 text-3xl font-black text-[var(--ink-900)]">تنبؤات ومقترحات تشغيلية</h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-700)]">
-              صفحة مستقلة تعرض توصيات الذكاء الاصطناعي بناءً على بيانات التشغيل (عرض تجريبي).
-            </p>
           </div>
           <a href="/admin/insights" className="button-primary">
             عرض صفحة المقترحات

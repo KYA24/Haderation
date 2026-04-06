@@ -18,17 +18,11 @@ export default async function FacultyOtpPage({ searchParams }) {
           <div className="hero-banner px-6 py-10 md:px-10">
             <BrandMark className="[&_p]:text-white" />
             <h1 className="mt-8 text-4xl font-black leading-tight text-white">التحقق من الرمز</h1>
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/82">
-              هذه الخطوة لتأكيد الدخول قبل تفعيل المحاضرة وربط الأنظمة التشغيلية.
-            </p>
             <div className="mt-8 rounded-[22px] bg-white/10 p-5 text-white/92">
               <div className="flex items-center gap-3">
                 <ShieldCheck className="h-5 w-5 text-[#f6edd8]" />
                 <p className="font-black">OTP تجريبي</p>
               </div>
-              <p className="mt-3 text-sm leading-7 text-white/78">
-                لا يتم إرسال أي رسائل فعلية في هذا النموذج.
-              </p>
             </div>
           </div>
 
@@ -36,9 +30,6 @@ export default async function FacultyOtpPage({ searchParams }) {
             <div className="mx-auto max-w-md">
               <p className="text-sm font-black text-[var(--kfu-green-700)]">الخطوة الثانية</p>
               <h2 className="mt-2 text-3xl font-black text-[var(--ink-900)]">أدخل رمز التحقق</h2>
-              <p className="mt-3 text-sm leading-7 text-[var(--ink-700)]">
-                بعد التأكيد سيتم تحويلك مباشرة إلى واجهة المحاضرة.
-              </p>
 
               <div className="mt-6">
                 <FacultyOtpForm facultyId={facultyId} academicId={academicId} />
