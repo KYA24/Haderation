@@ -38,6 +38,9 @@ export default async function HomePage() {
                   بوابة عضو هيئة التدريس
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
+                <Link href="/faculty/waiting?facultyId=f001" className="button-secondary">
+                  حالة انتظار وصول الدكتور
+                </Link>
                 <Link href="/admin" className="button-secondary">
                   لوحة الإدارة
                 </Link>

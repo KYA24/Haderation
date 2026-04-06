@@ -1,51 +1,30 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import {
   ArrowRightLeft,
-  ChevronDown,
   DoorOpen,
   MessageCircle,
   Send,
   TimerReset,
+  Zap,
 } from "lucide-react";
 
 const serviceMeta = {
   late_open: {
     title: "فتح متأخر",
-    icon: DoorOpen,
-    accent: "text-[var(--kfu-green-800)]",
-    description: "طلب فتح الكهرباء بعد انتهاء نافذة التشغيل التلقائي.",
-    reasons: [
-      "تأخر وصول الطلبة إلى القاعة",
-      "تأخر عضو هيئة التدريس عن الوصول",
-      "تأخر فتح المبنى أو البوابة",
-      "احتياج تشغيلي مرتبط بالمحاضرة",
-    ],
+    description: "إعادة تشغيل الطاقة بعد انتهاء نافذة التشغيل التلقائي.",
+    reasons: ["تأخر وصول الطلبة", "تأخر تجهيز القاعة", "احتياج تشغيلي", "تعطل مفاجئ"],
   },
   room_change: {
     title: "تغيير قاعة",
-    icon: ArrowRightLeft,
-    accent: "text-[var(--kfu-green-800)]",
-    description: "تحويل المحاضرة إلى قاعة بديلة جاهزة بشكل فوري.",
-    reasons: [
-      "خلل في تجهيزات العرض",
-      "عدم جاهزية التكييف أو الإضاءة",
-      "سعة القاعة غير كافية",
-      "احتياج أكاديمي أو تنظيمي",
-    ],
+    description: "تحويل المحاضرة إلى قاعة بديلة جاهزة.",
+    reasons: ["خلل في التجهيزات", "سعة القاعة غير كافية", "عطل في الكهرباء", "سبب تشغيلي"],
   },
   extension: {
     title: "تمديد الجلسة",
-    icon: TimerReset,
-    accent: "text-[var(--kfu-green-800)]",
-    description: "إضافة وقت قصير لاستكمال الشرح أو النشاط العملي.",
-    reasons: [
-      "استكمال الشرح",
-      "استكمال نشاط عملي",
-      "تأخر بداية المحاضرة",
-      "نقاش وتقييم إضافي",
-    ],
+    description: "تمديد الوقت في نهاية المحاضرة فقط.",
+    reasons: ["استكمال الشرح", "نقاش إضافي", "تعويض تأخير", "نشاط عملي"],
   },
 };
 
@@ -57,12 +36,21 @@ function formatClock(dateValue) {
   }).format(new Date(dateValue));
 }
 
-export default function FacultyDashboard({ initialData }) {
+function formatTime(dateValue) {
+  return new Intl.DateTimeFormat("ar-SA", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(dateValue));
+}
+
+export default function FacultyDashboard({ initialData, initialStartedAt }) {
   const [data, setData] = useState(initialData);
   const [clock, setClock] = useState(Date.now());
+  const [startedAt, setStartedAt] = useState(
+    Number.isFinite(initialStartedAt) ? initialStartedAt : Date.now()
+  );
   const [serviceType, setServiceType] = useState("late_open");
   const [reason, setReason] = useState(serviceMeta.late_open.reasons[0]);
-  const [serviceMenuOpen, setServiceMenuOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [notes, setNotes] = useState("");
   const [requestedRoomId, setRequestedRoomId] = useState("");
@@ -76,22 +64,37 @@ export default function FacultyDashboard({ initialData }) {
     return () => clearInterval(timer);
   }, []);
 
-  const roomOptions = useMemo(
-    () => data.availableRooms.filter((room) => room.id !== data.session.room.id),
-    [data.availableRooms, data.session.room.id]
-  );
+  const now = new Date(clock);
+  const startAt = new Date(data.session.startAt);
+  const endAt = new Date(data.session.endAt);
+  const durationMs = Math.max(0, endAt.getTime() - startAt.getTime());
+  const sessionStart = startedAt ? new Date(startedAt) : startAt;
+  const sessionEnd = new Date(sessionStart.getTime() + durationMs);
+  const autoPowerEndsAt = startedAt ? new Date(startedAt + 10 * 60 * 1000) : null;
+  const powerActive = Boolean(startedAt && autoPowerEndsAt && now <= autoPowerEndsAt);
+  const afterAuto = Boolean(startedAt && autoPowerEndsAt && now > autoPowerEndsAt);
+  const extensionWindowStart = new Date(sessionEnd.getTime() - 10 * 60 * 1000);
+  const showExtension = Boolean(startedAt && now >= extensionWindowStart);
+  const showLateActions = Boolean(startedAt && afterAuto && !showExtension);
+  const isDark = Boolean(afterAuto && !showExtension);
 
   const activeService = serviceMeta[serviceType];
-  const ActiveServiceIcon = activeService.icon;
   const reasonOptions = useMemo(
     () => [...activeService.reasons, "أخرى"],
     [activeService.reasons]
   );
 
   useEffect(() => {
+    if (showExtension) {
+      setServiceType("extension");
+    } else if (serviceType === "extension") {
+      setServiceType("late_open");
+    }
+  }, [showExtension, serviceType]);
+
+  useEffect(() => {
     setReason(serviceMeta[serviceType].reasons[0]);
     setNotes("");
-    setServiceMenuOpen(false);
     setNotesOpen(false);
   }, [serviceType]);
 
@@ -107,21 +110,21 @@ export default function FacultyDashboard({ initialData }) {
     setData(nextData);
   };
 
-  const submitRequest = () => {
+  const submitRequest = (type) => {
     setFeedback("");
     setError("");
 
     const fullReason = [reason, notes.trim()].filter(Boolean).join(" - ");
     const payload = {
-      type: serviceType,
-      reason: fullReason,
+      type,
+      reason: fullReason || serviceMeta[type].reasons[0],
     };
 
-    if (serviceType === "room_change") {
+    if (type === "room_change") {
       payload.requestedRoomId = requestedRoomId;
     }
 
-    if (serviceType === "extension") {
+    if (type === "extension") {
       payload.requestedMinutes = Number(extensionMinutes);
     }
 
@@ -145,97 +148,68 @@ export default function FacultyDashboard({ initialData }) {
     });
   };
 
-  const serviceCards = Object.entries(serviceMeta).map(([key, item]) => ({
-    ...item,
-    key,
-  }));
+  const handleStartLecture = () => {
+    setStartedAt(Date.now());
+    setFeedback("");
+    setError("");
+  };
 
-  const roomDigits = data.session.room.name.match(/\d+/)?.[0] || "";
-  const roomFloor = roomDigits.charAt(0);
-  const roomLabel =
-    roomFloor === "1" ? "10XX" : roomFloor === "2" ? "20XX" : data.session.room.name;
+  const roomOptions = useMemo(
+    () => data.availableRooms.filter((room) => room.id !== data.session.room.id),
+    [data.availableRooms, data.session.room.id]
+  );
 
   return (
     <div className="space-y-4">
-      <section className="glass-card overflow-hidden">
+      <section className={`glass-card overflow-hidden ${isDark ? "lecture-dark" : ""}`}>
         <div className="hero-banner px-5 py-4">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-bold text-white/70">الوقت</p>
-              <p className="mt-1 text-2xl font-black">{formatClock(clock)}</p>
+              <p className="mt-1 text-2xl font-black text-white">{formatClock(clock)}</p>
             </div>
             <div className="rounded-full bg-white/15 px-4 py-2 text-xs font-black text-white">
-              القاعة {roomLabel}
+              القاعة {data.session.room.name.replace("قاعة ", "")}
             </div>
           </div>
           <div className="mt-3">
             <p className="text-xs font-bold text-white/70">مادة المحاضرة</p>
-            <h2 className="mt-1 text-xl font-black">{data.session.courseName}</h2>
-            <p className="mt-1 text-xs text-white/75">{data.session.courseCode}</p>
+            <h2 className="mt-1 text-xl font-black text-white">{data.session.courseName}</h2>
+            <p className="mt-1 text-xs text-white/75">{data.session.courseCode} • الشعبة {data.session.section}</p>
           </div>
         </div>
-        <div className="flex items-center justify-between gap-3 px-5 py-3">
-          <div className="text-xs text-[var(--ink-700)]">الشعبة {data.session.section}</div>
-          <div className="rounded-full bg-[var(--surface-muted)] px-3 py-1 text-xs font-bold text-[var(--kfu-green-800)]">
-            {data.session.phaseLabel}
-          </div>
+
+        <div className="p-4">
+          {!startedAt ? (
+            <button type="button" className="button-primary w-full" onClick={handleStartLecture}>
+              <DoorOpen className="h-4 w-4" />
+              بدء المحاضرة وتشغيل المرافق
+            </button>
+          ) : (
+            <div className="flex items-center justify-between gap-3">
+              <div className={`text-xs font-bold ${isDark ? "text-white/80" : "text-[var(--ink-700)]"}`}>
+                {powerActive
+                  ? "الطاقة مفعلة تلقائيًا لمدة 10 دقائق"
+                  : showExtension
+                    ? "نهاية المحاضرة - جاهز للتمديد"
+                    : "الطاقة متوقفة - ارفع طلب فتح متأخر"}
+              </div>
+              <div className="flex items-center gap-2 text-xs font-bold text-[var(--kfu-green-800)]">
+                <Zap className="h-4 w-4" />
+                {powerActive ? "تشغيل" : "إيقاف"}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      <section id="services" className="glass-card p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-bold text-[var(--kfu-green-700)]">الخدمات</p>
-            <h3 className="mt-1 text-lg font-black text-[var(--ink-900)]">{activeService.title}</h3>
-          </div>
-          <button
-            type="button"
-            className="field-button w-auto min-h-10 px-4 text-xs font-bold"
-            onClick={() => setServiceMenuOpen((value) => !value)}
-          >
-            اختيار الخدمة
-            <ChevronDown className={`h-4 w-4 transition ${serviceMenuOpen ? "rotate-180" : ""}`} />
-          </button>
-        </div>
-
-        {serviceMenuOpen ? (
-          <div className="select-menu">
-            {serviceCards.map((item) => {
-              const Icon = item.icon;
-              const active = item.key === serviceType;
-              return (
-                <button
-                  key={item.key}
-                  type="button"
-                  onClick={() => {
-                    setServiceType(item.key);
-                    setServiceMenuOpen(false);
-                  }}
-                  className={`select-option ${active ? "active" : ""}`}
-                >
-                  <span className="flex items-center gap-2 font-bold">
-                    <Icon className="h-4 w-4 text-[var(--kfu-green-800)]" />
-                    {item.title}
-                  </span>
-                  {active ? (
-                    <span className="text-xs font-bold text-[var(--kfu-green-800)]">محدد</span>
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
-        ) : null}
-
-        <div className="mt-4 rounded-[24px] border border-[var(--line)] bg-[var(--surface-soft)] p-4">
+      {startedAt ? (
+        <section id="services" className="glass-card p-4">
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[var(--kfu-green-800)]">
-                <ActiveServiceIcon className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-[var(--ink-700)]">سبب الطلب</p>
-                <p className="text-sm font-black text-[var(--ink-900)]">{reason}</p>
-              </div>
+            <div>
+              <p className="text-xs font-bold text-[var(--kfu-green-700)]">الخدمات</p>
+              <h3 className="mt-1 text-lg font-black text-[var(--ink-900)]">{activeService.title}</h3>
+              <p className="mt-1 text-xs text-[var(--ink-700)]">{activeService.description}</p>
             </div>
             <button
               type="button"
@@ -249,48 +223,102 @@ export default function FacultyDashboard({ initialData }) {
             </button>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            {reasonOptions.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setReason(item)}
-                className={`rounded-full border px-3 py-2 text-xs font-bold transition ${
-                  reason === item
-                    ? "border-[var(--kfu-green-700)] bg-[var(--kfu-green-100)] text-[var(--kfu-green-800)]"
-                    : "border-[var(--line)] bg-white text-[var(--ink-700)]"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+          {showLateActions ? (
+            <div className="mt-4 grid gap-3">
+              <div className="flex flex-wrap gap-2">
+                {reasonOptions.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setReason(item)}
+                    className={`rounded-full border px-3 py-2 text-xs font-bold transition ${
+                      reason === item
+                        ? "border-[var(--kfu-green-700)] bg-[var(--kfu-green-100)] text-[var(--kfu-green-800)]"
+                        : "border-[var(--line)] bg-white text-[var(--ink-700)]"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
 
-          {serviceType === "room_change" ? (
-            <select
-              className="select mt-4"
-              value={requestedRoomId}
-              onChange={(event) => setRequestedRoomId(event.target.value)}
-            >
-              <option value="">قاعة بديلة</option>
-              {roomOptions.map((room) => (
-                <option key={room.id} value={room.id}>
-                  {room.name} - {room.building}
-                </option>
-              ))}
-            </select>
+              <div className="grid gap-2 md:grid-cols-2">
+                <button
+                  type="button"
+                  className="button-primary w-full"
+                  onClick={() => {
+                    setServiceType("late_open");
+                    submitRequest("late_open");
+                  }}
+                >
+                  <DoorOpen className="h-4 w-4" />
+                  فتح متأخر
+                </button>
+                <button
+                  type="button"
+                  className="button-secondary w-full"
+                  onClick={() => setServiceType("room_change")}
+                >
+                  <ArrowRightLeft className="h-4 w-4" />
+                  تغيير القاعة
+                </button>
+              </div>
+
+              {serviceType === "room_change" ? (
+                <div>
+                  <select
+                    className="select mt-2"
+                    value={requestedRoomId}
+                    onChange={(event) => setRequestedRoomId(event.target.value)}
+                  >
+                    <option value="">اختر القاعة البديلة</option>
+                    {roomOptions.map((room) => (
+                      <option key={room.id} value={room.id}>
+                        {room.name} - {room.building}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="button-primary mt-3 w-full"
+                    onClick={() => submitRequest("room_change")}
+                    disabled={isPending || !requestedRoomId}
+                  >
+                    <Send className="h-4 w-4" />
+                    رفع طلب تغيير القاعة
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : null}
 
-          {serviceType === "extension" ? (
-            <select
-              className="select mt-4"
-              value={extensionMinutes}
-              onChange={(event) => setExtensionMinutes(event.target.value)}
-            >
-              <option value="10">10 دقائق</option>
-              <option value="15">15 دقيقة</option>
-              <option value="20">20 دقيقة</option>
-            </select>
+          {showExtension ? (
+            <div className="mt-4 grid gap-3">
+              <select
+                className="select"
+                value={extensionMinutes}
+                onChange={(event) => setExtensionMinutes(event.target.value)}
+              >
+                <option value="10">10 دقائق</option>
+                <option value="15">15 دقيقة</option>
+                <option value="20">20 دقيقة</option>
+              </select>
+              <button
+                type="button"
+                className="button-secondary w-full"
+                onClick={() => submitRequest("extension")}
+                disabled={isPending}
+              >
+                <TimerReset className="h-4 w-4" />
+                تمديد الجلسة
+              </button>
+            </div>
+          ) : null}
+
+          {!showLateActions && !showExtension ? (
+            <div className="mt-4 rounded-[16px] bg-[var(--surface-soft)] px-4 py-3 text-xs font-bold text-[var(--ink-700)]">
+              الخدمات ستظهر عند انتهاء نافذة التشغيل أو قرب نهاية المحاضرة.
+            </div>
           ) : null}
 
           {notesOpen ? (
@@ -307,16 +335,21 @@ export default function FacultyDashboard({ initialData }) {
               {error || feedback}
             </div>
           ) : null}
+        </section>
+      ) : (
+        <section id="services" className="glass-card p-4">
+          <p className="text-sm font-bold text-[var(--ink-700)]">ابدأ المحاضرة لعرض الخدمات التشغيلية.</p>
+        </section>
+      )}
 
-          <button
-            type="button"
-            onClick={submitRequest}
-            disabled={isPending || (serviceType === "room_change" && !requestedRoomId)}
-            className="button-primary mt-4 w-full"
-          >
-            <Send className="h-4 w-4" />
-            رفع الطلب
-          </button>
+      <section id="requests" className="glass-card p-4">
+        <div className="text-xs font-bold text-[var(--ink-700)]">آخر حالة مسجلة</div>
+        <div className="mt-3 rounded-[16px] bg-[var(--surface-soft)] px-4 py-3 text-sm font-black text-[var(--ink-900)]">
+          {data.latestRequestLabel}
+        </div>
+        <div className="mt-3 flex items-center justify-between text-xs text-[var(--ink-700)]">
+          <span>البداية {formatTime(sessionStart)}</span>
+          <span>النهاية {formatTime(sessionEnd)}</span>
         </div>
       </section>
     </div>

@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Building2, ClipboardList, Home, ScrollText, Users } from "lucide-react";
+import { BarChart3, BrainCircuit, Building2, ClipboardList, Home, Map, ScrollText, Users } from "lucide-react";
 import BrandMark from "@/components/brand-mark";
 
 const items = [
   { href: "/admin", label: "الرئيسية", icon: BarChart3 },
   { href: "/admin/rooms", label: "القاعات", icon: Building2 },
   { href: "/admin/requests", label: "الطلبات", icon: ClipboardList },
+  { href: "/admin/insights", label: "ذكاء القرار", icon: BrainCircuit },
   { href: "/admin/faculty", label: "أعضاء الهيئة", icon: Users },
+  { href: "/admin/bms", label: "نطاقات BMS", icon: Map },
   { href: "/admin/logs", label: "السجل", icon: ScrollText },
 ];
 
@@ -35,7 +37,7 @@ export default function AdminSidebar() {
               href={href}
               className={`flex items-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition ${
                 active
-                  ? "bg-[var(--kfu-green-800)] text-white [&_svg]:text-white"
+                  ? "bg-[var(--kfu-green-800)] text-white [&_svg]:text-white [&_span]:text-white"
                   : "bg-[var(--surface-soft)] text-[var(--ink-700)] hover:bg-[var(--kfu-green-100)]"
               }`}
             >

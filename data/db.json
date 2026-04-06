@@ -1,4 +1,4 @@
-﻿{
+{
   "meta": {
     "campusName": "جامعة الملك فيصل - نموذج تجريبي",
     "timezone": "Asia/Riyadh"
@@ -6,44 +6,80 @@
   "blockchain": {
     "enabled": true,
     "network": "EduChain Sandbox",
-    "lastAnchorAt": "2026-04-05T10:42:00+03:00"
+    "lastAnchorAt": "2026-04-06T09:40:00+03:00"
   },
   "rooms": [
     {
-      "id": "r101",
-      "name": "قاعة A-101",
+      "id": "r1042",
+      "name": "قاعة 1042",
       "building": "مبنى الهندسة",
       "capacity": 48,
       "state": "سليمة",
-      "currentLoadKw": 6.2,
-      "lastHeartbeat": "2026-04-05T10:40:00+03:00"
+      "currentLoadKw": 6.4,
+      "lastHeartbeat": "2026-04-06T09:42:00+03:00"
     },
     {
-      "id": "r202",
-      "name": "قاعة B-202",
+      "id": "r1044",
+      "name": "قاعة 1044",
+      "building": "مبنى الهندسة",
+      "capacity": 44,
+      "state": "سليمة",
+      "currentLoadKw": 5.8,
+      "lastHeartbeat": "2026-04-06T09:41:00+03:00"
+    },
+    {
+      "id": "r1046",
+      "name": "قاعة 1046",
+      "building": "مبنى الهندسة",
+      "capacity": 40,
+      "state": "تحت الصيانة",
+      "currentLoadKw": 1.2,
+      "lastHeartbeat": "2026-04-06T09:35:00+03:00"
+    },
+    {
+      "id": "r1048",
+      "name": "قاعة 1048",
+      "building": "مبنى الهندسة",
+      "capacity": 52,
+      "state": "سليمة",
+      "currentLoadKw": 4.9,
+      "lastHeartbeat": "2026-04-06T09:43:00+03:00"
+    },
+    {
+      "id": "r2042",
+      "name": "قاعة 2042",
+      "building": "مبنى العلوم",
+      "capacity": 46,
+      "state": "سليمة",
+      "currentLoadKw": 6.9,
+      "lastHeartbeat": "2026-04-06T09:44:00+03:00"
+    },
+    {
+      "id": "r2044",
+      "name": "قاعة 2044",
       "building": "مبنى العلوم",
       "capacity": 36,
-      "state": "تحت الصيانة",
-      "currentLoadKw": 1.1,
-      "lastHeartbeat": "2026-04-05T10:36:00+03:00"
+      "state": "سليمة",
+      "currentLoadKw": 4.3,
+      "lastHeartbeat": "2026-04-06T09:39:00+03:00"
     },
     {
-      "id": "r303",
-      "name": "قاعة C-303",
-      "building": "مبنى الحاسب",
+      "id": "r2046",
+      "name": "قاعة 2046",
+      "building": "مبنى العلوم",
       "capacity": 54,
       "state": "حالة التماس",
       "currentLoadKw": 0,
-      "lastHeartbeat": "2026-04-05T10:30:00+03:00"
+      "lastHeartbeat": "2026-04-06T09:32:00+03:00"
     },
     {
-      "id": "r404",
-      "name": "قاعة D-404",
-      "building": "مبنى إدارة الأعمال",
-      "capacity": 42,
+      "id": "r2048",
+      "name": "قاعة 2048",
+      "building": "مبنى العلوم",
+      "capacity": 50,
       "state": "مغلقة",
-      "currentLoadKw": 0.3,
-      "lastHeartbeat": "2026-04-05T10:39:00+03:00"
+      "currentLoadKw": 0.4,
+      "lastHeartbeat": "2026-04-06T09:37:00+03:00"
     }
   ],
   "faculty": [
@@ -51,7 +87,7 @@
       "id": "f001",
       "name": "د. نورة العتيبي",
       "department": "علوم الحاسب",
-      "defaultRoomId": "r101",
+      "defaultRoomId": "r1042",
       "schedule": {
         "weekday": 1,
         "courseCode": "CS-441",
@@ -65,7 +101,7 @@
       "id": "f002",
       "name": "د. فيصل القحطاني",
       "department": "الهندسة الكهربائية",
-      "defaultRoomId": "r202",
+      "defaultRoomId": "r1044",
       "schedule": {
         "weekday": 1,
         "courseCode": "EE-315",
@@ -79,7 +115,7 @@
       "id": "f003",
       "name": "د. سارة الشمري",
       "department": "تقنيات التعليم",
-      "defaultRoomId": "r404",
+      "defaultRoomId": "r2042",
       "schedule": {
         "weekday": 1,
         "courseCode": "EDU-228",
@@ -92,66 +128,66 @@
   ],
   "requests": [
     {
-      "id": "req-1001",
+      "id": "req-2001",
       "facultyId": "f001",
       "type": "late_open",
-      "reason": "تأخر وصول الطلبة بسبب تحويل مسار الدخول للمبنى.",
+      "reason": "تأخر تشغيل القاعة بسبب تأخير دخول المجموعة.",
       "status": "approved",
       "requestedRoomId": null,
       "requestedMinutes": null,
-      "createdAt": "2026-04-05T10:14:00+03:00",
-      "reviewedAt": "2026-04-05T10:14:20+03:00",
-      "reviewNote": "اعتماد مباشر للتجربة." 
+      "createdAt": "2026-04-06T10:12:00+03:00",
+      "reviewedAt": "2026-04-06T10:12:30+03:00",
+      "reviewNote": "اعتماد مباشر للتجربة."
     },
     {
-      "id": "req-1002",
+      "id": "req-2002",
       "facultyId": "f002",
-      "type": "extension",
-      "reason": "استكمال تجربة القياسات العملية.",
+      "type": "room_change",
+      "reason": "عطل تقني في أجهزة العرض.",
       "status": "approved",
-      "requestedRoomId": null,
-      "requestedMinutes": 15,
-      "createdAt": "2026-04-05T09:58:00+03:00",
-      "reviewedAt": "2026-04-05T09:58:30+03:00",
+      "requestedRoomId": "r2044",
+      "requestedMinutes": null,
+      "createdAt": "2026-04-06T09:28:00+03:00",
+      "reviewedAt": "2026-04-06T09:28:40+03:00",
       "reviewNote": "اعتماد فوري للعرض."
     },
     {
-      "id": "req-1003",
+      "id": "req-2003",
       "facultyId": "f003",
-      "type": "room_change",
-      "reason": "تجهيز معمل العرض غير متاح في القاعة الأصلية.",
+      "type": "extension",
+      "reason": "استكمال النشاط العملي.",
       "status": "approved",
-      "requestedRoomId": "r101",
-      "requestedMinutes": null,
-      "createdAt": "2026-04-05T09:20:00+03:00",
-      "reviewedAt": "2026-04-05T09:20:10+03:00",
-      "reviewNote": "تحويل القاعة تلقائيًا."
+      "requestedRoomId": null,
+      "requestedMinutes": 15,
+      "createdAt": "2026-04-06T12:55:00+03:00",
+      "reviewedAt": "2026-04-06T12:55:30+03:00",
+      "reviewNote": "اعتماد مباشر للتمديد."
     }
   ],
   "logs": [
     {
-      "id": "log-1001",
-      "facultyId": "f002",
-      "action": "تمديد الجلسة",
-      "details": "تم اعتماد تمديد 15 دقيقة في قاعة B-202 بسبب استكمال تجربة القياسات العملية.",
-      "timestamp": "2026-04-05T09:58:30+03:00",
-      "txHash": "0xedu6a32c991ee1"
-    },
-    {
-      "id": "log-1002",
-      "facultyId": "f003",
-      "action": "تغيير قاعة",
-      "details": "تم نقل المحاضرة إلى قاعة A-101 بسبب عدم جاهزية معمل العرض.",
-      "timestamp": "2026-04-05T09:20:10+03:00",
-      "txHash": "0xedu7e90aa28bc4"
-    },
-    {
-      "id": "log-1003",
+      "id": "log-3001",
       "facultyId": "f001",
       "action": "فتح متأخر",
-      "details": "تم اعتماد طلب فتح متأخر بعد انتهاء نافذة التشغيل التلقائي.",
-      "timestamp": "2026-04-05T10:14:00+03:00",
-      "txHash": "0xedu973af018ce2"
+      "details": "د. نورة العتيبي حصلت على فتح متأخر في قاعة 1042 بسبب تأخير دخول المجموعة.",
+      "timestamp": "2026-04-06T10:12:30+03:00",
+      "txHash": "0xedu17c2f4b9"
+    },
+    {
+      "id": "log-3002",
+      "facultyId": "f002",
+      "action": "تغيير قاعة",
+      "details": "د. فيصل القحطاني تم تحويل محاضرته إلى قاعة 2044 بسبب عطل تقني في أجهزة العرض.",
+      "timestamp": "2026-04-06T09:28:40+03:00",
+      "txHash": "0xedu9b30c8aa"
+    },
+    {
+      "id": "log-3003",
+      "facultyId": "f003",
+      "action": "تمديد الجلسة",
+      "details": "د. سارة الشمري حصلت على تمديد مباشر لمدة 15 دقيقة.",
+      "timestamp": "2026-04-06T12:55:30+03:00",
+      "txHash": "0xedu2d907f11"
     }
   ],
   "integrations": [
@@ -173,6 +209,14 @@
     },
     {
       "id": "int-3",
+      "type": "bms",
+      "title": "ربط BMS للنطاقات",
+      "subtitle": "Building Scope",
+      "status": "مفعل",
+      "description": "يراقب نطاق كل مبنى ويجمع عدة قاعات ضمن نطاق طاقة واحد."
+    },
+    {
+      "id": "int-4",
       "type": "blockchain",
       "title": "طبقة التدقيق اللامركزي",
       "subtitle": "EduChain",

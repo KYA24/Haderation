@@ -17,7 +17,7 @@
       </div>
       {!compact ? (
         <div>
-          <p className="text-3xl font-black tracking-tight text-[var(--kfu-green-900)]">هَدْرَيْشِن</p>
+          <p className="text-3xl font-black tracking-tight text-[var(--kfu-green-900)]">هدريشن</p>
           <p className="text-sm font-bold text-[var(--kfu-green-700)]">منصة الخدمات والطاقة الذكية</p>
         </div>
       ) : null}

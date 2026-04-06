@@ -1,14 +1,27 @@
-﻿import FacultyDashboard from "@/components/faculty-dashboard";
+import FacultyDashboard from "@/components/faculty-dashboard";
+import MicFab from "@/components/mic-fab";
 import { getFacultyPortalData } from "@/lib/domain";
 import Link from "next/link";
-import { BellRing, House, Mic, QrCode, UserRound } from "lucide-react";
+import { CalendarDays, House, UserRound } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+function buildQuery(facultyId, loginAt) {
+  const params = new URLSearchParams();
+  params.set("facultyId", facultyId);
+  if (loginAt) {
+    params.set("loginAt", String(loginAt));
+  }
+  return params.toString();
+}
 
 export default async function FacultyHomePage({ searchParams }) {
   const params = await searchParams;
   const facultyId = params?.facultyId || "f001";
+  const loginAtParam = params?.loginAt ? Number(params.loginAt) : null;
+  const initialStartedAt = Number.isFinite(loginAtParam) ? loginAtParam : Date.now();
   const data = await getFacultyPortalData(facultyId);
+  const query = buildQuery(data.faculty.id, loginAtParam);
 
   return (
     <main className="page-wrap py-3 md:py-6">
@@ -28,27 +41,21 @@ export default async function FacultyHomePage({ searchParams }) {
         </header>
 
         <div className="mobile-content">
-          <FacultyDashboard initialData={data} />
+          <FacultyDashboard initialData={data} initialStartedAt={initialStartedAt} />
         </div>
 
-        <div className="mic-fab" aria-hidden="true">
-          <Mic className="h-7 w-7" />
-        </div>
+        <MicFab />
 
         <nav className="bottom-nav">
-          <Link href={`/faculty/home?facultyId=${data.faculty.id}`} className="bottom-nav-item active">
+          <Link href={`/faculty/home?${query}`} className="bottom-nav-item active">
             <House className="h-5 w-5" />
             الرئيسية
           </Link>
-          <a href="#services" className="bottom-nav-item">
-            <QrCode className="h-5 w-5" />
-            الخدمات
-          </a>
-          <a href="#requests" className="bottom-nav-item">
-            <BellRing className="h-5 w-5" />
-            الطلبات
-          </a>
-          <Link href="/faculty" className="bottom-nav-item">
+          <Link href={`/faculty/schedule?${query}`} className="bottom-nav-item">
+            <CalendarDays className="h-5 w-5" />
+            الجدول
+          </Link>
+          <Link href={`/faculty/profile?${query}`} className="bottom-nav-item">
             <UserRound className="h-5 w-5" />
             الحساب
           </Link>

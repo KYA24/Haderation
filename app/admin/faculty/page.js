@@ -1,4 +1,5 @@
-﻿import { getAdminOverview } from "@/lib/domain";
+import Link from "next/link";
+import { getAdminOverview } from "@/lib/domain";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,11 @@ export default async function AdminFacultyPage() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {data.facultySummary.map((faculty) => (
-          <article key={faculty.id} className="glass-card p-5">
+          <Link
+            key={faculty.id}
+            href={`/admin/faculty/${faculty.id}`}
+            className="glass-card p-5 transition hover:-translate-y-1"
+          >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="font-black text-[var(--ink-900)]">{faculty.name}</h3>
@@ -25,7 +30,7 @@ export default async function AdminFacultyPage() {
                 <p className="mt-1 text-[11px] font-black">طلبات</p>
               </div>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>
