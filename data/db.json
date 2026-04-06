@@ -1,6 +1,6 @@
-{
+﻿{
   "meta": {
-    "campusName": "جامعة الرياض الرقمية",
+    "campusName": "جامعة الملك فيصل - نموذج تجريبي",
     "timezone": "Asia/Riyadh"
   },
   "blockchain": {
@@ -33,7 +33,7 @@
       "building": "مبنى الحاسب",
       "capacity": 54,
       "state": "حالة التماس",
-      "currentLoadKw": 0.0,
+      "currentLoadKw": 0,
       "lastHeartbeat": "2026-04-05T10:30:00+03:00"
     },
     {
@@ -53,7 +53,7 @@
       "department": "علوم الحاسب",
       "defaultRoomId": "r101",
       "schedule": {
-        "weekday": 0,
+        "weekday": 1,
         "courseCode": "CS-441",
         "courseName": "أنظمة إنترنت الأشياء",
         "section": "231",
@@ -67,7 +67,7 @@
       "department": "الهندسة الكهربائية",
       "defaultRoomId": "r202",
       "schedule": {
-        "weekday": 0,
+        "weekday": 1,
         "courseCode": "EE-315",
         "courseName": "إدارة الأحمال الذكية",
         "section": "112",
@@ -81,7 +81,7 @@
       "department": "تقنيات التعليم",
       "defaultRoomId": "r404",
       "schedule": {
-        "weekday": 0,
+        "weekday": 1,
         "courseCode": "EDU-228",
         "courseName": "الفصل التفاعلي",
         "section": "304",
@@ -95,13 +95,13 @@
       "id": "req-1001",
       "facultyId": "f001",
       "type": "late_open",
-      "reason": "تأخر وصول الطلاب بسبب تحويل البوابة الشرقية.",
-      "status": "pending",
+      "reason": "تأخر وصول الطلبة بسبب تحويل مسار الدخول للمبنى.",
+      "status": "approved",
       "requestedRoomId": null,
       "requestedMinutes": null,
       "createdAt": "2026-04-05T10:14:00+03:00",
-      "reviewedAt": null,
-      "reviewNote": null
+      "reviewedAt": "2026-04-05T10:14:20+03:00",
+      "reviewNote": "اعتماد مباشر للتجربة." 
     },
     {
       "id": "req-1002",
@@ -133,7 +133,7 @@
       "id": "log-1001",
       "facultyId": "f002",
       "action": "تمديد الجلسة",
-      "details": "تم اعتماد تمديد 15 دقيقة في قاعة B-202 لسبب: استكمال تجربة القياسات العملية.",
+      "details": "تم اعتماد تمديد 15 دقيقة في قاعة B-202 بسبب استكمال تجربة القياسات العملية.",
       "timestamp": "2026-04-05T09:58:30+03:00",
       "txHash": "0xedu6a32c991ee1"
     },
@@ -148,8 +148,8 @@
     {
       "id": "log-1003",
       "facultyId": "f001",
-      "action": "طلب فتح متأخر",
-      "details": "تم رفع طلب استثناء لفتح الكهرباء بعد فترة التشغيل التلقائي.",
+      "action": "فتح متأخر",
+      "details": "تم اعتماد طلب فتح متأخر بعد انتهاء نافذة التشغيل التلقائي.",
       "timestamp": "2026-04-05T10:14:00+03:00",
       "txHash": "0xedu973af018ce2"
     }
@@ -161,7 +161,7 @@
       "title": "تكامل الجدول الدراسي",
       "subtitle": "SIS Stream",
       "status": "نشط",
-      "description": "يجلب أوقات المحاضرات لتفعيل نافذة التشغيل التلقائي في أول 10 دقائق."
+      "description": "يجلب أوقات المحاضرات لتفعيل نافذة التشغيل التلقائي خلال أول 10 دقائق من بداية الجلسة."
     },
     {
       "id": "int-2",
@@ -177,7 +177,7 @@
       "title": "طبقة التدقيق اللامركزي",
       "subtitle": "EduChain",
       "status": "مفعل",
-      "description": "يحجز بصمة مرئية لكل قرار تشغيلي لإظهار مفهوم التتبع غير القابل للتعديل."
+      "description": "تحجز بصمة مرئية لكل قرار تشغيلي لإظهار التتبع غير القابل للتعديل."
     }
   ]
 }

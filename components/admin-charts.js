@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   Area,
@@ -7,94 +7,88 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
+  Legend,
   Pie,
   PieChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 
-const palette = ["#f1c84d", "#66d3ff", "#2bd67b", "#ff7d7d"];
+const palette = ["#146556", "#c89f3d", "#1d7b69", "#bd3d3a"];
 
 export default function AdminCharts({ charts }) {
   return (
-    <div className="grid gap-6 xl:grid-cols-2">
-      <div className="rounded-3xl border border-white/8 bg-black/20 p-4">
-        <p className="mb-4 text-sm font-bold text-slate-300">استهلاك الطاقة خلال اليوم</p>
-        <div className="overflow-x-auto">
-          <AreaChart width={520} height={280} data={charts.energyTrend}>
-            <defs>
-              <linearGradient id="energyFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#66d3ff" stopOpacity={0.45} />
-                <stop offset="100%" stopColor="#66d3ff" stopOpacity={0.02} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-            <XAxis dataKey="label" stroke="#aab0c0" />
-            <YAxis stroke="#aab0c0" />
-            <Tooltip
-              contentStyle={{
-                background: "#10131a",
-                border: "1px solid rgba(255,255,255,.1)",
-                borderRadius: "16px",
-              }}
-            />
-            <Area
-              type="monotone"
-              dataKey="load"
-              stroke="#66d3ff"
-              fill="url(#energyFill)"
-              strokeWidth={3}
-            />
-          </AreaChart>
+    <div className="grid gap-5 xl:grid-cols-2">
+      <div className="glass-card p-4">
+        <p className="mb-4 text-sm font-black text-[var(--ink-900)]">استهلاك الطاقة خلال اليوم</p>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer>
+            <AreaChart data={charts.energyTrend}>
+              <defs>
+                <linearGradient id="energyFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#146556" stopOpacity={0.45} />
+                  <stop offset="100%" stopColor="#146556" stopOpacity={0.03} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#d9e5e1" vertical={false} />
+              <XAxis dataKey="label" stroke="#6d8680" />
+              <YAxis stroke="#6d8680" />
+              <Tooltip
+                contentStyle={{
+                  background: "#ffffff",
+                  border: "1px solid #d9e5e1",
+                  borderRadius: "18px",
+                }}
+              />
+              <Area type="monotone" dataKey="load" stroke="#146556" fill="url(#energyFill)" strokeWidth={3} />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/8 bg-black/20 p-4">
-        <p className="mb-4 text-sm font-bold text-slate-300">توزيع حالات القاعات</p>
-        <div className="overflow-x-auto">
-          <PieChart width={520} height={280}>
-            <Pie
-              data={charts.roomStateDistribution}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={70}
-              outerRadius={105}
-              paddingAngle={3}
-              cx="50%"
-              cy="50%"
-            >
-              {charts.roomStateDistribution.map((entry, index) => (
-                <Cell key={entry.name} fill={palette[index % palette.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                background: "#10131a",
-                border: "1px solid rgba(255,255,255,.1)",
-                borderRadius: "16px",
-              }}
-            />
-          </PieChart>
+      <div className="glass-card p-4">
+        <p className="mb-4 text-sm font-black text-[var(--ink-900)]">توزيع حالات القاعات</p>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie data={charts.roomStateDistribution} dataKey="value" nameKey="name" innerRadius={60} outerRadius={95} paddingAngle={4}>
+                {charts.roomStateDistribution.map((entry, index) => (
+                  <Cell key={entry.name} fill={palette[index % palette.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  background: "#ffffff",
+                  border: "1px solid #d9e5e1",
+                  borderRadius: "18px",
+                }}
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/8 bg-black/20 p-4 xl:col-span-2">
-        <p className="mb-4 text-sm font-bold text-slate-300">طلبات الاستثناء حسب النوع</p>
-        <div className="overflow-x-auto">
-          <BarChart width={1080} height={280} data={charts.requestTypes}>
-            <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-            <XAxis dataKey="label" stroke="#aab0c0" />
-            <YAxis stroke="#aab0c0" />
-            <Tooltip
-              contentStyle={{
-                background: "#10131a",
-                border: "1px solid rgba(255,255,255,.1)",
-                borderRadius: "16px",
-              }}
-            />
-            <Bar dataKey="count" fill="#f1c84d" radius={[14, 14, 0, 0]} />
-          </BarChart>
+      <div className="glass-card p-4 xl:col-span-2">
+        <p className="mb-4 text-sm font-black text-[var(--ink-900)]">أنواع الطلبات المرفوعة</p>
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer>
+            <BarChart data={charts.requestTypes}>
+              <CartesianGrid stroke="#d9e5e1" vertical={false} />
+              <XAxis dataKey="label" stroke="#6d8680" />
+              <YAxis stroke="#6d8680" />
+              <Tooltip
+                contentStyle={{
+                  background: "#ffffff",
+                  border: "1px solid #d9e5e1",
+                  borderRadius: "18px",
+                }}
+              />
+              <Bar dataKey="count" fill="#c89f3d" radius={[16, 16, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

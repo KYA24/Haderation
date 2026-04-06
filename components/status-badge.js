@@ -1,4 +1,4 @@
-const statusClassMap = {
+﻿const statusClassMap = {
   سليمة: "status-healthy",
   "تحت الصيانة": "status-maintenance",
   "حالة التماس": "status-fault",

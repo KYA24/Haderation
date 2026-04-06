@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createFacultyRequest } from "@/lib/domain";
 
 export const dynamic = "force-dynamic";

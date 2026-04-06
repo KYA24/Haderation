@@ -1,14 +1,8 @@
-import Link from "next/link";
-import {
-  ArrowLeft,
-  Building2,
-  Cpu,
-  GraduationCap,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+﻿import Link from "next/link";
+import { ArrowLeft, Building2, GraduationCap, ShieldCheck, Sparkles } from "lucide-react";
 import AppShell from "@/components/app-shell";
 import BlockchainBadge from "@/components/blockchain-badge";
+import BrandMark from "@/components/brand-mark";
 import IntegrationCard from "@/components/integration-card";
 import { getAdminOverview, getFacultyPortalData } from "@/lib/domain";
 
@@ -22,149 +16,108 @@ export default async function HomePage() {
 
   return (
     <AppShell>
-      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8 px-5 py-6 md:px-8">
-        <header className="card shell-grid overflow-hidden p-6 md:p-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-3xl space-y-5">
+      <main className="page-wrap">
+        <section className="hero-banner card overflow-hidden px-6 py-8 md:px-8 md:py-10">
+          <div className="grid gap-8 lg:grid-cols-[1.4fr_0.9fr] lg:items-center">
+            <div>
               <div className="flex flex-wrap items-center gap-3">
-                <span className="badge border border-white/10 bg-white/5 text-sm text-slate-200">
-                  <Zap className="h-4 w-4 text-[var(--accent)]" />
-                  إدارة طاقة القاعات الذكية
-                </span>
                 <BlockchainBadge />
+                <span className="badge bg-white/10 text-white">واجهة مستوحاة من كفو KFU</span>
               </div>
-              <div className="space-y-3">
-                <h1 className="text-4xl font-black tracking-tight text-white md:text-6xl">
-                  هدريشن - منصة إدارة طاقة القاعات الذكية
+              <div className="mt-6 max-w-3xl">
+                <BrandMark className="text-white [&_p]:text-white" />
+                <h1 className="mt-6 text-4xl font-black leading-tight md:text-6xl">
+                  إعادة بناء واجهة هَدْرَيْشِن بأسلوب جامعي رسمي، واضح، ومتجاوب بالكامل.
                 </h1>
-                <p className="max-w-2xl text-lg leading-8 text-slate-300">
-                  منصة لادارة تشغيل الكهرباء داخل القاعات الدراسية بذكاء، مع
-                  تتبع لحظي للجلسات، استثناءات فورية، وسجل تدقيق موثوق لجامعات
-                  المملكة.
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 md:text-lg">
+                  تم توجيه القالب إلى طابع بصري قريب من جامعة الملك فيصل: مساحات بيضاء أوسع، درجات أخضر وذهبي، بطاقات خدمات أوضح، وتجربة جوال تحاكي التطبيقات الجامعية الرسمية.
                 </p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="kpi p-4">
-                  <p className="text-sm text-slate-400">القاعات المتصلة</p>
-                  <p className="mt-2 text-3xl font-black">
-                    {admin.kpis.totalRooms}
-                  </p>
-                </div>
-                <div className="kpi p-4">
-                  <p className="text-sm text-slate-400">جلسات اليوم</p>
-                  <p className="mt-2 text-3xl font-black">
-                    {admin.kpis.todaysSessions}
-                  </p>
-                </div>
-                <div className="kpi p-4">
-                  <p className="text-sm text-slate-400">استجابة الاستثناءات</p>
-                  <p className="mt-2 text-3xl font-black">
-                    {admin.kpis.approvalRate}%
-                  </p>
-                </div>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link href="/faculty" className="button-primary">
+                  بوابة عضو هيئة التدريس
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+                <Link href="/admin" className="button-secondary">
+                  لوحة الإدارة
+                </Link>
               </div>
             </div>
 
-            <div className="grid w-full max-w-xl gap-4">
-              <div className="card glow p-5">
+            <div className="grid gap-4">
+              <div className="glass-card p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm text-slate-400">بوابة الإدارة</p>
-                    <p className="mt-2 text-2xl font-extrabold">
-                      تحكم شامل ومؤشرات حية
-                    </p>
+                    <p className="text-sm font-bold text-[var(--kfu-green-700)]">العضو النشط</p>
+                    <h2 className="mt-2 text-2xl font-black text-[var(--ink-900)]">{facultyPortal.faculty.name}</h2>
+                    <p className="mt-1 text-sm text-[var(--ink-700)]">{facultyPortal.faculty.department}</p>
                   </div>
-                  <Building2 className="h-10 w-10 text-[var(--accent)]" />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--kfu-green-100)] text-[var(--kfu-green-800)]">
+                    <GraduationCap className="h-7 w-7" />
+                  </div>
                 </div>
-                <p className="mt-3 text-sm leading-7 text-slate-300">
-                  مراقبة حالة القاعات، مراجعة الطلبات الاستثنائية، ومتابعة السجل
-                  التشغيلي والتدقيق.
-                </p>
-                <Link
-                  href="/admin"
-                  className="button-primary mt-5 inline-flex items-center gap-2"
-                >
-                  الدخول إلى الإدارة
-                  <ArrowLeft className="h-4 w-4" />
-                </Link>
               </div>
-
-              <div className="card p-5">
-                <div className="flex items-center justify-between gap-3">
+              <div className="glass-card p-5">
+                <div className="grid grid-cols-3 gap-3 text-center">
                   <div>
-                    <p className="text-sm text-slate-400">
-                      بوابة عضو هيئة التدريس
-                    </p>
-                    <p className="mt-2 text-2xl font-extrabold">
-                      {facultyPortal.faculty.name}
-                    </p>
+                    <p className="text-sm font-bold text-[var(--ink-700)]">القاعات</p>
+                    <p className="mt-2 text-3xl font-black text-[var(--kfu-green-900)]">{admin.kpis.totalRooms}</p>
                   </div>
-                  <GraduationCap className="h-10 w-10 text-[var(--accent-2)]" />
+                  <div>
+                    <p className="text-sm font-bold text-[var(--ink-700)]">جلسات اليوم</p>
+                    <p className="mt-2 text-3xl font-black text-[var(--kfu-green-900)]">{admin.kpis.todaysSessions}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-[var(--ink-700)]">الاعتماد</p>
+                    <p className="mt-2 text-3xl font-black text-[var(--kfu-green-900)]">{admin.kpis.approvalRate}%</p>
+                  </div>
                 </div>
-                <p className="mt-3 text-sm leading-7 text-slate-300">
-                  عرض الجلسة الحالية، طلب فتح متأخر، نقل قاعة، أو تمديد الجلسة
-                  بتجربة سريعة مناسبة للعرض.
-                </p>
-                <Link
-                  href="/faculty"
-                  className="button-secondary mt-5 inline-flex items-center gap-2"
-                >
-                  الدخول كعضو هيئة تدريس
-                  <ArrowLeft className="h-4 w-4" />
-                </Link>
               </div>
             </div>
           </div>
-        </header>
+        </section>
 
-        <section className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
-          <div className="card p-6">
+        <section className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+          <div className="card p-6 md:p-7">
             <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-[var(--success)]" />
-              <h2 className="text-xl font-extrabold">تجربة دخول مبسطة</h2>
+              <ShieldCheck className="h-5 w-5 text-[var(--kfu-green-800)]" />
+              <h2 className="text-2xl font-black text-[var(--ink-900)]">مسارات الاستخدام</h2>
             </div>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <Link
-                href="/admin"
-                className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[var(--accent)]/40 hover:bg-white/[0.05]"
-              >
-                <p className="text-sm text-slate-400">المسار 01</p>
-                <h3 className="mt-2 text-2xl font-bold">مركز الطاقة الجامعي</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-300">
-                  مؤشرات لحظية، مراجعات الاستثناءات، وتكاملات النظام الذكي.
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <Link href="/admin" className="glass-card p-5 transition hover:-translate-y-1">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--kfu-green-100)] text-[var(--kfu-green-800)]">
+                  <Building2 className="h-6 w-6" />
+                </div>
+                <h3 className="mt-4 text-xl font-black text-[var(--ink-900)]">لوحة الإدارة</h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--ink-700)]">
+                  متابعة القاعات، الطلبات، السجلات، ومؤشرات التشغيل من لوحة واحدة بطابع إداري رسمي.
                 </p>
               </Link>
-              <Link
-                href="/faculty"
-                className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[var(--accent-2)]/40 hover:bg-white/[0.05]"
-              >
-                <p className="text-sm text-slate-400">المسار 02</p>
-                <h3 className="mt-2 text-2xl font-bold">
-                  واجهة عضو هيئة التدريس
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-300">
-                  تفعيل متأخر عبر QR، تغيير القاعة، وتمديد الجلسة مع سجل موثق.
+              <Link href="/faculty" className="glass-card p-5 transition hover:-translate-y-1">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--kfu-gold-100)] text-[var(--kfu-gold-700)]">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <h3 className="mt-4 text-xl font-black text-[var(--ink-900)]">تطبيق الجوال</h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--ink-700)]">
+                  واجهة جوال حقيقية بأسفل ثابت وزر صوتي مركزي وتجربة طلب موحدة أكثر قربًا من تطبيقات KFU.
                 </p>
               </Link>
             </div>
           </div>
 
-          <div className="card p-6">
+          <div className="card p-6 md:p-7">
             <div className="flex items-center gap-3">
-              <Cpu className="h-5 w-5 text-[var(--accent)]" />
-              <h2 className="text-xl font-extrabold">التكاملات التجريبية</h2>
+              <ShieldCheck className="h-5 w-5 text-[var(--kfu-gold-700)]" />
+              <h2 className="text-2xl font-black text-[var(--ink-900)]">التكاملات</h2>
             </div>
-            <div className="mt-5 grid gap-4">
+            <div className="mt-6 grid gap-4">
               {admin.integrations.map((integration) => (
-                <IntegrationCard
-                  key={integration.id}
-                  integration={integration}
-                />
+                <IntegrationCard key={integration.id} integration={integration} />
               ))}
             </div>
           </div>
         </section>
-      </section>
+      </main>
     </AppShell>
   );
 }

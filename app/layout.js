@@ -1,8 +1,9 @@
-import "./globals.css";
+﻿import "./globals.css";
 
 export const metadata = {
-  title: "هدريشن - منصة إدارة طاقة القاعات الذكية",
-  description: "نموذج أولي لإدارة طاقة القاعات الدراسية الذكية في الجامعات السعودية",
+  title: "هَدْرَيْشِن | منصة الخدمات الجامعية الذكية",
+  description:
+    "واجهة جامعية عربية مستوحاة من جامعة الملك فيصل لإدارة الخدمات والطلبات الذكية داخل الحرم.",
 };
 
 export default function RootLayout({ children }) {

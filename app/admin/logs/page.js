@@ -1,4 +1,4 @@
-import LogFeed from "@/components/log-feed";
+﻿import LogFeed from "@/components/log-feed";
 import { getAdminOverview } from "@/lib/domain";
 
 export const dynamic = "force-dynamic";
@@ -9,8 +9,8 @@ export default async function AdminLogsPage() {
   return (
     <section className="card p-5 md:p-6">
       <div>
-        <p className="text-sm text-slate-400">السجل</p>
-        <h2 className="text-2xl font-black">السجل التشغيلي الكامل</h2>
+        <p className="text-sm font-black text-[var(--kfu-green-700)]">السجل</p>
+        <h2 className="mt-2 text-3xl font-black text-[var(--ink-900)]">السجل التشغيلي الكامل</h2>
       </div>
       <LogFeed logs={data.logs} />
     </section>

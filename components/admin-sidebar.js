@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BarChart3, Building2, ClipboardList, Home, ScrollText, Users } from "lucide-react";
+import BrandMark from "@/components/brand-mark";
 
 const items = [
   { href: "/admin", label: "الرئيسية", icon: BarChart3 },
@@ -16,24 +17,26 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="card sticky top-4 h-fit p-4 md:p-5">
-      <div className="mb-5 border-b border-white/8 pb-4">
-        <p className="text-xs font-bold text-[var(--accent)]">ADMIN</p>
-        <h2 className="mt-2 text-xl font-black">مركز الإدارة</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">تنقل بسيط وواضح، وكل صفحة لوحدها.</p>
+    <aside className="card sticky top-5 h-fit p-5">
+      <BrandMark compact />
+      <div className="mt-5 rounded-[24px] bg-[var(--surface-soft)] p-4">
+        <p className="text-sm font-black text-[var(--kfu-green-700)]">لوحة الإدارة</p>
+        <p className="mt-2 text-sm leading-7 text-[var(--ink-700)]">
+          تنقل جانبي ثابت وصفحات مستقلة للغرف والطلبات والأعضاء والسجل التشغيلي.
+        </p>
       </div>
 
-      <nav className="space-y-2">
+      <nav className="mt-5 grid gap-2">
         {items.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
+              className={`flex items-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition ${
                 active
-                  ? "bg-[var(--accent)] text-[#141414]"
-                  : "bg-white/[0.03] text-slate-200 hover:bg-white/[0.06]"
+                  ? "bg-[var(--kfu-green-800)] text-white"
+                  : "bg-[var(--surface-soft)] text-[var(--ink-700)] hover:bg-[var(--kfu-green-100)]"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -43,10 +46,7 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <Link
-        href="/"
-        className="mt-4 flex items-center gap-3 rounded-2xl border border-white/8 px-4 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/[0.04]"
-      >
+      <Link href="/" className="button-secondary mt-5 w-full">
         <Home className="h-4 w-4" />
         الصفحة الرئيسية
       </Link>
