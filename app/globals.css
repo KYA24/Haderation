@@ -21,9 +21,9 @@
   --danger: #bd3d3a;
   --shadow-lg: 0 24px 70px rgba(14, 65, 56, 0.12);
   --shadow-md: 0 14px 36px rgba(14, 65, 56, 0.1);
-  --radius-xl: 32px;
-  --radius-lg: 24px;
-  --radius-md: 18px;
+  --radius-xl: 12px;
+  --radius-lg: 10px;
+  --radius-md: 8px;
 }
 
 * {
@@ -151,7 +151,7 @@ button:disabled {
   justify-content: center;
   gap: 10px;
   min-height: 54px;
-  border-radius: 18px;
+  border-radius: 12px;
   padding: 0 20px;
   transition: 180ms ease;
   cursor: pointer;
@@ -190,13 +190,13 @@ button:disabled {
   border: 1px solid var(--line);
   background: #fff;
   color: var(--ink-900);
-  border-radius: 18px;
+  border-radius: 12px;
   padding: 14px 16px;
 }
 
 .field-button {
   justify-content: space-between;
-  min-height: 58px;
+  min-height: 52px;
   font-weight: 700;
 }
 
@@ -226,7 +226,7 @@ button:disabled {
   gap: 12px;
   width: 100%;
   padding: 14px 16px;
-  border-radius: 18px;
+  border-radius: 12px;
   background: var(--surface-soft);
   border: 1px solid var(--line);
   color: var(--ink-900);
@@ -256,7 +256,7 @@ button:disabled {
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0, transparent 35%, rgba(255, 255, 255, 0.03) 100%);
 }
 
-.hero-banner > * {
+.hero-banner>* {
   position: relative;
   z-index: 1;
 }
@@ -267,7 +267,7 @@ button:disabled {
   min-height: calc(100vh - 32px);
   margin: 0 auto;
   border: 1px solid rgba(195, 215, 209, 0.95);
-  border-radius: 38px;
+  border-radius: 24px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 247, 245, 0.96));
   box-shadow: 0 30px 80px rgba(14, 65, 56, 0.18);
   overflow: hidden;
@@ -391,6 +391,6 @@ button:disabled {
   .section-card,
   .glass-card,
   .kpi {
-    border-radius: 24px;
+    border-radius: 18px;
   }
 }

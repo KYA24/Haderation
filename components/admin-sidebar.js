@@ -35,7 +35,7 @@ export default function AdminSidebar() {
               href={href}
               className={`flex items-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition ${
                 active
-                  ? "bg-[var(--kfu-green-800)] text-white"
+                  ? "bg-[var(--kfu-green-800)] text-white [&_svg]:text-white"
                   : "bg-[var(--surface-soft)] text-[var(--ink-700)] hover:bg-[var(--kfu-green-100)]"
               }`}
             >

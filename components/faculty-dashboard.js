@@ -2,17 +2,13 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import {
-  AlarmClockCheck,
   ArrowRightLeft,
-  CheckCircle2,
   ChevronDown,
-  Clock3,
   DoorOpen,
-  Mic,
+  MessageCircle,
   Send,
   TimerReset,
 } from "lucide-react";
-import StatusBadge from "@/components/status-badge";
 
 const serviceMeta = {
   late_open: {
@@ -61,20 +57,13 @@ function formatClock(dateValue) {
   }).format(new Date(dateValue));
 }
 
-function formatDateTime(dateValue) {
-  return new Intl.DateTimeFormat("ar-SA", {
-    weekday: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(dateValue));
-}
-
 export default function FacultyDashboard({ initialData }) {
   const [data, setData] = useState(initialData);
   const [clock, setClock] = useState(Date.now());
   const [serviceType, setServiceType] = useState("late_open");
   const [reason, setReason] = useState(serviceMeta.late_open.reasons[0]);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [serviceMenuOpen, setServiceMenuOpen] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(false);
   const [notes, setNotes] = useState("");
   const [requestedRoomId, setRequestedRoomId] = useState("");
   const [extensionMinutes, setExtensionMinutes] = useState("15");
@@ -94,12 +83,23 @@ export default function FacultyDashboard({ initialData }) {
 
   const activeService = serviceMeta[serviceType];
   const ActiveServiceIcon = activeService.icon;
+  const reasonOptions = useMemo(
+    () => [...activeService.reasons, "أخرى"],
+    [activeService.reasons]
+  );
 
   useEffect(() => {
     setReason(serviceMeta[serviceType].reasons[0]);
     setNotes("");
-    setMenuOpen(false);
+    setServiceMenuOpen(false);
+    setNotesOpen(false);
   }, [serviceType]);
+
+  useEffect(() => {
+    if (reason === "أخرى") {
+      setNotesOpen(true);
+    }
+  }, [reason]);
 
   const refreshSession = async () => {
     const response = await fetch(`/api/faculty/session?facultyId=${data.faculty.id}`);
@@ -150,98 +150,120 @@ export default function FacultyDashboard({ initialData }) {
     key,
   }));
 
+  const roomDigits = data.session.room.name.match(/\d+/)?.[0] || "";
+  const roomFloor = roomDigits.charAt(0);
+  const roomLabel =
+    roomFloor === "1" ? "10XX" : roomFloor === "2" ? "20XX" : data.session.room.name;
+
   return (
     <div className="space-y-4">
       <section className="glass-card overflow-hidden">
-        <div className="hero-banner px-5 py-5">
-          <div className="flex items-start justify-between gap-4">
+        <div className="hero-banner px-5 py-4">
+          <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-bold text-white/80">الجلسة الحالية</p>
-              <h2 className="mt-2 text-2xl font-black">{data.session.courseName}</h2>
-              <p className="mt-2 text-sm text-white/80">
-                {data.session.courseCode} • الشعبة {data.session.section}
-              </p>
+              <p className="text-xs font-bold text-white/70">الوقت</p>
+              <p className="mt-1 text-2xl font-black">{formatClock(clock)}</p>
             </div>
-            <div className="rounded-full bg-white/14 px-4 py-2 text-sm font-black">
-              {formatClock(clock)}
+            <div className="rounded-full bg-white/15 px-4 py-2 text-xs font-black text-white">
+              القاعة {roomLabel}
             </div>
+          </div>
+          <div className="mt-3">
+            <p className="text-xs font-bold text-white/70">مادة المحاضرة</p>
+            <h2 className="mt-1 text-xl font-black">{data.session.courseName}</h2>
+            <p className="mt-1 text-xs text-white/75">{data.session.courseCode}</p>
           </div>
         </div>
-
-        <div className="p-4">
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-[20px] bg-[var(--surface-muted)] px-3 py-4">
-              <p className="text-xs font-bold text-[var(--ink-700)]">الحالة</p>
-              <p className="mt-2 text-sm font-black text-[var(--kfu-green-800)]">{data.session.phaseLabel}</p>
-            </div>
-            <div className="rounded-[20px] bg-[var(--surface-muted)] px-3 py-4">
-              <p className="text-xs font-bold text-[var(--ink-700)]">المتبقي</p>
-              <p className="mt-2 text-sm font-black text-[var(--kfu-green-800)]">{data.session.remainingMinutes} دقيقة</p>
-            </div>
-            <div className="rounded-[20px] bg-[var(--surface-muted)] px-3 py-4">
-              <p className="text-xs font-bold text-[var(--ink-700)]">الطاقة</p>
-              <p className="mt-2 text-sm font-black text-[var(--kfu-green-800)]">
-                {data.session.powerOpen ? "مفعلة" : "مغلقة"}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-sm font-black text-[var(--ink-900)]">{data.session.room.name}</p>
-              <p className="text-xs text-[var(--ink-700)]">نافذة التشغيل حتى {formatDateTime(data.session.autoOpenEndsAt)}</p>
-            </div>
-            <StatusBadge status={data.session.room.state} />
-          </div>
-
-          <div className="mt-4 rounded-[20px] bg-[var(--surface-soft)] px-4 py-4 text-sm leading-7 text-[var(--ink-700)]">
-            {data.session.statusMessage}
+        <div className="flex items-center justify-between gap-3 px-5 py-3">
+          <div className="text-xs text-[var(--ink-700)]">الشعبة {data.session.section}</div>
+          <div className="rounded-full bg-[var(--surface-muted)] px-3 py-1 text-xs font-bold text-[var(--kfu-green-800)]">
+            {data.session.phaseLabel}
           </div>
         </div>
       </section>
 
       <section id="services" className="glass-card p-4">
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-sm font-bold text-[var(--kfu-green-700)]">الخدمات السريعة</p>
-            <h3 className="text-lg font-black text-[var(--ink-900)]">رفع الطلب من بطاقة موحدة</h3>
+            <p className="text-xs font-bold text-[var(--kfu-green-700)]">الخدمات</p>
+            <h3 className="mt-1 text-lg font-black text-[var(--ink-900)]">{activeService.title}</h3>
           </div>
-          <div className="rounded-full bg-[var(--kfu-green-100)] px-3 py-2 text-xs font-black text-[var(--kfu-green-800)]">
-            اعتماد مباشر
-          </div>
+          <button
+            type="button"
+            className="field-button w-auto min-h-10 px-4 text-xs font-bold"
+            onClick={() => setServiceMenuOpen((value) => !value)}
+          >
+            اختيار الخدمة
+            <ChevronDown className={`h-4 w-4 transition ${serviceMenuOpen ? "rotate-180" : ""}`} />
+          </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          {serviceCards.map((item) => {
-            const Icon = item.icon;
-            const active = item.key === serviceType;
-            return (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => setServiceType(item.key)}
-                className={`rounded-[22px] border px-3 py-4 text-center transition ${
-                  active
-                    ? "border-[var(--kfu-green-700)] bg-[var(--kfu-green-100)]"
-                    : "border-[var(--line)] bg-white"
-                }`}
-              >
-                <Icon className="mx-auto h-6 w-6 text-[var(--kfu-green-800)]" />
-                <p className="mt-2 text-xs font-black text-[var(--ink-900)]">{item.title}</p>
-              </button>
-            );
-          })}
-        </div>
+        {serviceMenuOpen ? (
+          <div className="select-menu">
+            {serviceCards.map((item) => {
+              const Icon = item.icon;
+              const active = item.key === serviceType;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => {
+                    setServiceType(item.key);
+                    setServiceMenuOpen(false);
+                  }}
+                  className={`select-option ${active ? "active" : ""}`}
+                >
+                  <span className="flex items-center gap-2 font-bold">
+                    <Icon className="h-4 w-4 text-[var(--kfu-green-800)]" />
+                    {item.title}
+                  </span>
+                  {active ? (
+                    <span className="text-xs font-bold text-[var(--kfu-green-800)]">محدد</span>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
 
         <div className="mt-4 rounded-[24px] border border-[var(--line)] bg-[var(--surface-soft)] p-4">
-          <div className="flex items-start gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[var(--kfu-green-800)]">
-              <ActiveServiceIcon className="h-5 w-5" />
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[var(--kfu-green-800)]">
+                <ActiveServiceIcon className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-[var(--ink-700)]">سبب الطلب</p>
+                <p className="text-sm font-black text-[var(--ink-900)]">{reason}</p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-black text-[var(--ink-900)]">{activeService.title}</h4>
-              <p className="text-sm leading-7 text-[var(--ink-700)]">{activeService.description}</p>
-            </div>
+            <button
+              type="button"
+              className={`flex h-9 w-9 items-center justify-center rounded-full border text-[var(--kfu-green-800)] ${
+                notesOpen ? "border-[var(--kfu-green-700)] bg-[var(--kfu-green-100)]" : "border-[var(--line)] bg-white"
+              }`}
+              onClick={() => setNotesOpen((value) => !value)}
+              aria-label="إضافة ملاحظات"
+            >
+              <MessageCircle className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {reasonOptions.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setReason(item)}
+                className={`rounded-full border px-3 py-2 text-xs font-bold transition ${
+                  reason === item
+                    ? "border-[var(--kfu-green-700)] bg-[var(--kfu-green-100)] text-[var(--kfu-green-800)]"
+                    : "border-[var(--line)] bg-white text-[var(--ink-700)]"
+                }`}
+              >
+                {item}
+              </button>
+            ))}
           </div>
 
           {serviceType === "room_change" ? (
@@ -250,7 +272,7 @@ export default function FacultyDashboard({ initialData }) {
               value={requestedRoomId}
               onChange={(event) => setRequestedRoomId(event.target.value)}
             >
-              <option value="">اختر القاعة البديلة</option>
+              <option value="">قاعة بديلة</option>
               {roomOptions.map((room) => (
                 <option key={room.id} value={room.id}>
                   {room.name} - {room.building}
@@ -271,41 +293,20 @@ export default function FacultyDashboard({ initialData }) {
             </select>
           ) : null}
 
-          <div className="mt-4">
-            <button type="button" className="field-button" onClick={() => setMenuOpen((value) => !value)}>
-              <span>{reason}</span>
-              <span className="flex items-center gap-2 text-[var(--ink-700)]">
-                سبب الطلب
-                <ChevronDown className={`h-4 w-4 transition ${menuOpen ? "rotate-180" : ""}`} />
-              </span>
-            </button>
+          {notesOpen ? (
+            <textarea
+              className="textarea mt-4"
+              placeholder="ملاحظات إضافية (اختياري)"
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+            />
+          ) : null}
 
-            {menuOpen ? (
-              <div className="select-menu">
-                {activeService.reasons.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => {
-                      setReason(item);
-                      setMenuOpen(false);
-                    }}
-                    className={`select-option ${reason === item ? "active" : ""}`}
-                  >
-                    <span className="font-bold">{item}</span>
-                    {reason === item ? <CheckCircle2 className="h-5 w-5 text-[var(--kfu-green-800)]" /> : null}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-
-          <textarea
-            className="textarea mt-4"
-            placeholder="ملاحظات إضافية مرتبطة بالسبب المختار"
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
-          />
+          {(error || feedback) ? (
+            <div className="mt-4 rounded-[16px] bg-white px-4 py-3 text-xs font-bold text-[var(--ink-700)]">
+              {error || feedback}
+            </div>
+          ) : null}
 
           <button
             type="button"
@@ -316,43 +317,6 @@ export default function FacultyDashboard({ initialData }) {
             <Send className="h-4 w-4" />
             رفع الطلب
           </button>
-        </div>
-      </section>
-
-      <section id="requests" className="grid gap-4">
-        <div className="glass-card p-4">
-          <div className="mb-3 flex items-center gap-2">
-            <Mic className="h-4 w-4 text-[var(--kfu-gold-700)]" />
-            <h3 className="text-base font-black text-[var(--ink-900)]">الأوامر الصوتية</h3>
-          </div>
-          <p className="text-sm leading-7 text-[var(--ink-700)]">
-            زر الميكروفون ظاهر في الأسفل كتجهيز بصري لتجربة speech-to-text وتنفيذ الخدمات صوتيًا لاحقًا.
-          </p>
-        </div>
-
-        <div className="glass-card p-4">
-          <div className="mb-3 flex items-center gap-2">
-            <Clock3 className="h-4 w-4 text-[var(--kfu-gold-700)]" />
-            <h3 className="text-base font-black text-[var(--ink-900)]">حالة الطلب</h3>
-          </div>
-          <div className="rounded-[20px] bg-[var(--surface-soft)] p-4 text-sm leading-7 text-[var(--ink-700)]">
-            {error || feedback || data.latestRequestLabel}
-          </div>
-        </div>
-
-        <div className="glass-card p-4">
-          <div className="mb-3 flex items-center gap-2">
-            <AlarmClockCheck className="h-4 w-4 text-[var(--kfu-green-800)]" />
-            <h3 className="text-base font-black text-[var(--ink-900)]">آخر السجل</h3>
-          </div>
-          <div className="space-y-3">
-            {data.logs.map((log) => (
-              <div key={log.id} className="rounded-[20px] border border-[var(--line)] bg-white p-4">
-                <p className="font-black text-[var(--ink-900)]">{log.action}</p>
-                <p className="mt-1 text-sm leading-7 text-[var(--ink-700)]">{log.details}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </div>

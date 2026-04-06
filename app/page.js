@@ -27,7 +27,7 @@ export default async function HomePage() {
               <div className="mt-6 max-w-3xl">
                 <BrandMark className="text-white [&_p]:text-white" />
                 <h1 className="mt-6 text-4xl font-black leading-tight md:text-6xl">
-                  إعادة بناء واجهة هَدْرَيْشِن بأسلوب جامعي رسمي، واضح، ومتجاوب بالكامل.
+                  إعادة بناء واجهة هدرييشن بأسلوب جامعي رسمي، واضح، ومتجاوب بالكامل.
                 </h1>
                 <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 md:text-lg">
                   تم توجيه القالب إلى طابع بصري قريب من جامعة الملك فيصل: مساحات بيضاء أوسع، درجات أخضر وذهبي، بطاقات خدمات أوضح، وتجربة جوال تحاكي التطبيقات الجامعية الرسمية.

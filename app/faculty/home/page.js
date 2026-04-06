@@ -1,5 +1,4 @@
 ﻿import FacultyDashboard from "@/components/faculty-dashboard";
-import BrandMark from "@/components/brand-mark";
 import { getFacultyPortalData } from "@/lib/domain";
 import Link from "next/link";
 import { BellRing, House, Mic, QrCode, UserRound } from "lucide-react";
@@ -29,9 +28,6 @@ export default async function FacultyHomePage({ searchParams }) {
         </header>
 
         <div className="mobile-content">
-          <div className="mb-4 flex items-center justify-center">
-            <BrandMark compact />
-          </div>
           <FacultyDashboard initialData={data} />
         </div>
 
